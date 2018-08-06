@@ -41,11 +41,9 @@ $(date +'%Y-%B-%d %T %Z')
 ln -fs ${RISCV}/riscv64-unknown-elf/share/riscv-tests/benchmarks/${BMARK}.riscv ${BASEDIR}/output/${BMARK}.riscv
 
 #Show Configuration
-
 ./script-src/show-emulator-info.py $(find ${PARENTDIR}/generated-src/*${CONFIG}.json)
 
 #Start Emulating + Show total time to run the emulator
-
 echo "
 Total time to run emulator"
 time { ${PARENTDIR}/emulator-freechips.rocketchip.system-${CONFIG} +max-cycles=100000000 +verbose ${BASEDIR}/output/${BMARK}.riscv 3>&1 1>&2 2>&3 | ${RISCV}/bin/spike-dasm > ${BASEDIR}/output/${BMARK}.riscv.out && [ $PIPESTATUS -eq 0 ] ; } 2> ${BASEDIR}/output/${BMARK}.out
@@ -58,12 +56,10 @@ echo ""
 for file in $(find ${BASEDIR}/profiling/*); do
     ./script-src/summarize_asm.py $file &
 done
+
 #Wait and Show output
-
 wait
-
 for file in $(find ${BASEDIR}/summary/*); do
     cat $file
 done
-
 rm -rf variable.json
